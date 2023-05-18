@@ -18,3 +18,22 @@ if __name__ == '__main__':
 
     # создаем файл 'moscowpython.json' в данными по каналу
     moscowpython.to_json('moscowpython.json')
+
+import json
+
+if __name__ == '__main__':
+    with open('moscowpython.json', 'r') as f:
+        data = json.load(f)
+
+    moscowpython = Channel(data['id'])
+    moscowpython.title = data['title']
+    moscowpython.description = data['description']
+    moscowpython.url = data['url']
+    moscowpython.subscriber_count = data['subscriber_count']
+    moscowpython.video_count = data['video_count']
+    moscowpython.view_count = data['view_count']
+
+    # выводим значения атрибутов из объекта moscowpython
+    print(moscowpython.title)
+    print(moscowpython.video_count)
+    print(moscowpython.url)
