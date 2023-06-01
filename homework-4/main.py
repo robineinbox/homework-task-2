@@ -1,11 +1,20 @@
 from src.video import Video, PLVideo
 from src.channel import Channel
 
-if __name__ == '__main__':
+if __name__ == 'main':
     channel = Channel("channel_id")
 
-    video1 = Video('AWX4JnAnjBE', 'GIL в Python: зачем он нужен и как с этим жить', 'https://www.youtube.com/watch?v=AWX4JnAnjBE', 100, 10)
-    video2 = PLVideo('4fObz_qw9u4', 'PLv_zOGKKxVph_8g2Mqc3LMhj0M_BfasbC', 'MoscowPython Meetup 78 - вступление', 'https://www.youtube.com/watch?v=4fObz_qw9u4', 200, 20)
+    video1 = Video('AWX4JnAnjBE')
+    video1.title = 'GIL в Python: зачем он нужен и как с этим жить'
+    video1.url = 'https://www.youtube.com/watch?v=AWX4JnAnjBE'
+    video1.views = 100
+    video1.likes = 10
+
+    video2 = PLVideo('4fObz_qw9u4', 'PLv_zOGKKxVph_8g2Mqc3LMhj0M_BfasbC')
+    video2.title = 'MoscowPython Meetup 78 - вступление'
+    video2.url = 'https://www.youtube.com/watch?v=4fObz_qw9u4'
+    video2.views = 200
+    video2.likes = 20
 
     assert str(video1) == 'GIL в Python: зачем он нужен и как с этим жить'
     assert str(video2) == 'MoscowPython Meetup 78 - вступление'

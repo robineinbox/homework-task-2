@@ -1,10 +1,10 @@
 class Video:
-    def __init__(self, video_id, title="", url="", views=0, likes=0):
+    def __init__(self, video_id):
         self.video_id = video_id
-        self.title = title
-        self.url = url
-        self.views = views
-        self.likes = likes
+        self.title = ""
+        self.url = ""
+        self.views = 0
+        self.likes = 0
 
     def __str__(self):
         return self.title
