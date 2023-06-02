@@ -1,5 +1,6 @@
 class Video:
     def __init__(self, video_id):
+        self.youtube = None
         self.video_id = video_id
         self.title = ""
         self.url = ""
@@ -9,10 +10,11 @@ class Video:
     def __str__(self):
         return self.title
 
+
 class PLVideo(Video):
-    def __init__(self, video_id, playlist_id, title="", url="", views=0, likes=0):
-        super().__init__(video_id, title, url, views, likes)
+    def __init__(self, video_id, playlist_id):
+        super().__init__(video_id)
         self.playlist_id = playlist_id
 
     def __str__(self):
-        return super().__str__()
+         return super().__str__()
