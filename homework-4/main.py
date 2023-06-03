@@ -7,13 +7,27 @@ if __name__ == '__main__':
     assert str(video1) == 'GIL в Python: зачем он нужен и как с этим жить'
     assert str(video2) == 'MoscowPython Meetup 78 - вступление'
 
-    video_response = video1.youtube.videos().list(part='snippet,statistics,contentDetails,topicDetails', id=video1.video_id).execute()
-    video1.title = video_response['items'][0]['snippet']['title']
-    print(video1.title)
 
-    playlist_response = video2.youtube.playlists().list(part='snippet', id=video2.playlist_id).execute()
-    video2.title = playlist_response['items'][0]['snippet']['title']
-    print(video2.title)
+
+
+
+
+
+
+
+
+
+
+
+
+
+    # video_response = video1.youtube.videos().list(part='snippet,statistics,contentDetails,topicDetails', id=video1.video_id).execute()
+    # video1.title = video_response['items'][0]['snippet']['title']
+    # print(video1.title)
+    #
+    # playlist_response = video2.youtube.playlists().list(part='snippet', id=video2.playlist_id).execute()
+    # video2.title = playlist_response['items'][0]['snippet']['title']
+    # print(video2.title)
 
 
 

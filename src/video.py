@@ -1,11 +1,20 @@
+from googleapiclient.discovery import build
+
+YOUTUBE_API_SERVICE_NAME = 'youtube'
+YOUTUBE_API_VERSION = 'v3'
+DEVELOPER_KEY = 'AIzaSyDsBEAxo4P9SfFuKeJImC8jgL9sQXfsbq4'
+
+
 class Video:
     def __init__(self, video_id):
-        self.youtube = None
+        self.youtube = build(YOUTUBE_API_SERVICE_NAME, YOUTUBE_API_VERSION,
+                             developerKey=DEVELOPER_KEY)
         self.video_id = video_id
-        self.title = ""
-        self.url = ""
-        self.views = 0
-        self.likes = 0
+        video_response = self.youtube.videos().list(part='snippet,statistics', id=video_id).execute()
+        self.title = video_response['items'][0]['snippet']['title']
+        self.url = f"https://www.youtube.com/watch?v={self.video_id}"
+        self.views = video_response['items'][0]['statistics']['viewCount']
+        self.likes = video_response['items'][0]['statistics']['likeCount']
 
     def __str__(self):
         return self.title
