@@ -6,7 +6,7 @@ class Channel:
     def __init__(self, channel_id: str) -> None:
         """Экземпляр инициализируется id канала. Дальше все данные будут подтягиваться по API."""
         self.channel_id = channel_id
-        self._api_key = "your_api_key" # замените на свой API ключ
+        self._api_key = "AIzaSyDsBEAxo4P9SfFuKeJImC8jgL9sQXfsbq4" # замените на свой API ключ
         self._base_url = "https://www.googleapis.com/youtube/v3"
         self._data = self._get_channel_data()
 
