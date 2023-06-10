@@ -1,0 +1,14 @@
+[tool.poetry]
+name = "poetry shell"
+version = "poetry shell"
+description = "\u0018"
+authors = ["robineinbox <robin_e@inbox.ru>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
