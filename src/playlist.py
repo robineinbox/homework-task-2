@@ -1,47 +1,3 @@
-from googleapiclient.discovery import build
-from datetime import timedelta
-import isodate
-
-
-class PlayList:
-    def __init__(self, playlist_id, api_key):
-        self.playlist_id = playlist_id
-        self.api_key = "AIzaSyDsBEAxo4P9SfFuKeJImC8jgL9sQXfsbq4"
-        self.youtube = build('youtube', 'v3', developerKey=self.api_key)
-        self.playlist_info = self.youtube.playlists().list(
-            part='snippet',
-            id=self.playlist_id
-        ).execute()
-        self.title = self.playlist_info['items'][0]['snippet']['title']
-        self.url = f"https://www.youtube.com/playlist?list={self.playlist_id}"
-
-    def get_playlist_videos(self):
-        playlist_items = self.youtube.playlistItems().list(
-            part='contentDetails',
-            playlistId=self.playlist_id,
-            maxResults=50
-        ).execute()
-        playlist_video_ids = [video['contentDetails']['videoId'] for video in playlist_items['items']]
-        video_response = self.youtube.videos().list(
-            part='contentDetails, statistics',
-            id=','.join(playlist_video_ids)
-        ).execute()
-        return video_response
-
-    @property
-    def total_duration(self):
-        video_response = self.get_playlist_videos()
-        duration = timedelta()
-        for video in video_response['items']:
-            iso_8601_duration = video['contentDetails']['duration']
-            duration += isodate.parse_duration(iso_8601_duration)
-        return duration
-
-    def show_best_video(self):
-        best_video = \
-        sorted(self.get_playlist_videos()['items'], key=lambda x: int(x['statistics']['likeCount']), reverse=True)[0]
-        video_id = best_video['id']
-        return f"https://youtu.be/{video_id}"
 
 
 
@@ -70,317 +26,77 @@ class PlayList:
 
 
 
-# from googleapiclient.discovery import build
+# from googleapiclient.discovery import build        #Дз_5
 # from datetime import timedelta
+# import isodate
+#
 #
 # class PlayList:
 #     def __init__(self, playlist_id, api_key):
-#         self.youtube = build('youtube', 'v3', developerKey=api_key)
 #         self.playlist_id = playlist_id
-#         self.api_key = api_key
-#         playlist_info = self.youtube.playlists().list(
-#             part='snippet',
-#             id=self.playlist_id).execute()
-#         self.title = playlist_info['items'][0]['snippet']['title']
-#         self.url = f"https://www.youtube.com/playlist?list={self.playlist_id}"
-#         self.playlist_url = self.url
-#
-#     @property
-#     def total_duration(self):
-#         video_info = self.youtube.playlistItems().list(
-#             part='contentDetails',
-#             playlistId=self.playlist_id,
-#             maxResults=50
-#         ).execute()
-#         total_time = timedelta()
-#         for vid in video_info['items']:
-#             duration = vid['contentDetails'].get('duration', 'PT0S')
-#             time_obj = duration_converter(duration)
-#             total_time += time_obj
-#         return total_time
-#
-#     def show_best_video(self):
-#         video_info = self.youtube.playlistItems().list(
-#             part='snippet',
-#             playlistId=self.playlist_id,
-#             maxResults=50
-#         ).execute()
-#         best_video = sorted(video_info['items'], key=lambda x: int(x['snippet']['likeCount']), reverse=True)[0]
-#         video_id = best_video['snippet']['resourceId']['videoId']
-#         return f"https://youtu.be/{video_id}"
-#
-#
-#
-# def duration_converter(duration):
-#     time = timedelta()
-#     time_dict = {
-#         'H': 3600,
-#         'M': 60,
-#         'S': 1,
-#     }
-#     time_list = duration.replace('PT', '').replace('H', ':').replace('M', ':').replace('S', '').split(':')
-#     if len(time_list)==1 and time_list[0]=='':
-#         time_list[0]='0:0'
-#     for t in time_list:
-#         if not t:
-#             continue
-#         t_time = ''
-#         for i in range(len(t)):
-#             if t[i].isalpha():
-#                  t_time += f"{time_dict[t[i]] * int(t[i - 1]):02}"
-#         time += timedelta(seconds=int(t_time))
-#     return time
-
-
-
-
-
-
-
-
-
-
-
-
-# from googleapiclient.discovery import build
-# from datetime import timedelta
-#
-# class PlayList:
-#     def __init__(self, playlist_id, api_key):
-#         self.youtube = build('youtube', 'v3', developerKey=api_key)
-#         self.playlist_id = playlist_id
-#         self.api_key = api_key
-#         playlist_info = self.youtube.playlists().list(
-#             part='snippet',
-#             id=self.playlist_id).execute()
-#         self.title = playlist_info['items'][0]['snippet']['title']
-#         self.url = f"https://www.youtube.com/playlist?list={self.playlist_id}"
-#         self.playlist_url = self.url
-#
-#     @property
-#     def total_duration(self):
-#         video_info = self.youtube.playlistItems().list(
-#             part='contentDetails',
-#             playlistId=self.playlist_id,
-#             maxResults=50
-#         ).execute()
-#         total_time = timedelta()
-#         for vid in video_info['items']:
-#             duration = vid['contentDetails'].get('duration', 'PT0S')
-#             time_obj = duration_converter(duration)
-#             total_time += time_obj
-#         return total_time
-#
-#     def show_best_video(self):
-#         video_info = self.youtube.playlistItems().list(
-#             part='snippet',
-#             playlistId=self.playlist_id,
-#             maxResults=50
-#         ).execute()
-#         best_video = sorted(video_info['items'], key=lambda x: int(x['snippet']['likeCount']), reverse=True)[0]
-#         video_id = best_video['snippet']['resourceId']['videoId']
-#         return f"https://youtu.be/{video_id}"
-
-
-
-
-# def duration_converter(duration):
-#     time = timedelta()
-#     time_dict = {
-#         'H': 3600,
-#         'M': 60,
-#         'S': 1,
-#     }
-#     time_list = duration.replace('PT', '').split('M')
-#     if len(time_list) == 2:
-#         time_list[0] = '0H' + time_list[0]
-#     for t in time_list:
-#         if not t:
-#             continue
-#         t_time = ''
-#         for i in range(len(t)):
-#             if t[i].isalpha():
-#                 t_time += f"{time_dict[t[i]] * int(t[i - 1]):02}"
-#         time += timedelta(seconds=int(t_time))
-#     return time
-def duration_converter(duration):
-    time = timedelta()
-
-    time_dict = {
-        'H': 3600,
-        'M': 60,
-        'S': 1,
-    }
-
-    time_unit = ''
-    time_value = ''
-    for i in range(len(duration)):
-        if duration[i].isdigit():
-            time_value += duration[i]
-        elif duration[i].isalpha():
-            time_unit += duration[i]
-
-            if time_unit in time_dict:
-                time += timedelta(seconds=int(time_value) * time_dict[time_unit])
-
-                time_value = ''
-                time_unit = ''
-
-    return time
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# from googleapiclient.discovery import build
-# from datetime import timedelta
-#
-# class PlayList:
-#     def __init__(self, playlist_id, api_key):
-#         self.youtube = None
-#         self.playlist_id = playlist_id
-#         self.api_key = "AIzaSyCpRKc2CHbfcdMypAQV007jeeq9jufpQHo"
-#
-#         youtube = build('youtube', 'v3', developerKey=self.api_key)
-#         playlist_info = youtube.playlists().list(
+#         self.api_key = "AIzaSyDsBEAxo4P9SfFuKeJImC8jgL9sQXfsbq4"
+#         self.youtube = build('youtube', 'v3', developerKey=self.api_key)
+#         self.playlist_info = self.youtube.playlists().list(
 #             part='snippet',
 #             id=self.playlist_id
 #         ).execute()
-#
-#         self.title = playlist_info['items'][0]['snippet']['title']
+#         self.title = self.playlist_info['items'][0]['snippet']['title']
 #         self.url = f"https://www.youtube.com/playlist?list={self.playlist_id}"
-#         self.playlist_url = self.url
 #
-#     @property
-#     def total_duration(self):
-#         video_info = self.youtube.playlistItems().list(
+#     def get_playlist_videos(self):
+#         playlist_items = self.youtube.playlistItems().list(
 #             part='contentDetails',
 #             playlistId=self.playlist_id,
 #             maxResults=50
 #         ).execute()
-#         total_time = timedelta()
-#         for vid in video_info['items']:
-#             duration = vid['contentDetails'].get('duration', 'PT0S')
-#             time_obj = duration_converter(duration)
-#             total_time += time_obj
-#         return total_time
-#
-#     def show_best_video(self):
-#         video_info = self.youtube.playlistItems().list(
-#             part='snippet',
-#             playlistId=self.playlist_id,
-#             maxResults=50
+#         playlist_video_ids = [video['contentDetails']['videoId'] for video in playlist_items['items']]
+#         video_response = self.youtube.videos().list(
+#             part='contentDetails, statistics',
+#             id=','.join(playlist_video_ids)
 #         ).execute()
-#         best_video = sorted(video_info['items'], key=lambda x: int(x['snippet']['likeCount']), reverse=True)[0]
-#         video_id = best_video['snippet']['resourceId']['videoId']
-#         return f"https://youtu.be/{video_id}"
-#
-# def duration_converter(duration):
-#     time = timedelta()
-#     time_dict = {
-#         'H': 3600,
-#         'M': 60,
-#         'S': 1,
-#     }
-#     time_list = duration.replace('PT', '').split('M')
-#     if len(time_list) == 2:
-#         time_list[0] = '0H' + time_list[0]
-#     for t in time_list:
-#         if not t:
-#             continue
-#         t_time = ''
-#         for i in range(len(t)):
-#             if t[i].isalpha():
-#                 t_time += f"{time_dict[t[i]] * int(t[i - 1]):02}"
-#         time += timedelta(seconds=int(t_time))
-#     return time
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# from googleapiclient.discovery import build
-# from datetime import timedelta
-#
-#
-# class PlayList:
-#     def __init__(self, playlist_id):
-#         self.youtube = build('youtube', 'v3', developerKey="AIzaSyDsBEAxo4P9SfFuKeJImC8jgL9sQXfsbq4")
-#         playlist_info = self.youtube.playlists().list(
-#             part='snippet',
-#             id=playlist_id
-#         ).execute()
-#         self.title = playlist_info['items'][0]['snippet']['title']
-#         self.url = f"https://www.youtube.com/playlist?list={playlist_id}"
-#         self.playlist_id = playlist_id
+#         return video_response
 #
 #     @property
 #     def total_duration(self):
-#         video_info = self.youtube.playlistItems().list(
-#             part='contentDetails',
-#             playlistId=self.playlist_id,
-#             maxResults=50
-#         ).execute()
-#         total_time = timedelta()
-#         for vid in video_info['items']:
-#             duration = vid['contentDetails']['duration']
-#             time_obj = duration_converter(duration)
-#             total_time += time_obj
-#         return total_time
+#         video_response = self.get_playlist_videos()
+#         duration = timedelta()
+#         for video in video_response['items']:
+#             iso_8601_duration = video['contentDetails']['duration']
+#             duration += isodate.parse_duration(iso_8601_duration)
+#         return duration
 #
 #     def show_best_video(self):
-#         video_info = self.youtube.playlistItems().list(
-#             part='snippet',
-#             playlistId=self.playlist_id,
-#             maxResults=50
-#         ).execute()
-#         best_video = sorted(video_info['items'], key=lambda x: int(x['snippet']['likeCount']), reverse=True)[0]
-#         video_id = best_video['snippet']['resourceId']['videoId']
+#         best_video = \
+#         sorted(self.get_playlist_videos()['items'], key=lambda x: int(x['statistics']['likeCount']), reverse=True)[0]
+#         video_id = best_video['id']
 #         return f"https://youtu.be/{video_id}"
 #
 #
 # def duration_converter(duration):
 #     time = timedelta()
+#
 #     time_dict = {
 #         'H': 3600,
 #         'M': 60,
 #         'S': 1,
 #     }
-#     time_list = duration.replace('PT', '').split('M')
-#     if len(time_list) == 2:
-#         time_list[0] = '0H' + time_list[0]
-#     for t in time_list:
-#         if not t:
-#             continue
-#         t_time = ''
-#         for i in range(len(t)):
-#             if t[i].isalpha():
-#                 t_time += f"{time_dict[t[i]] * int(t[i - 1]):02}"
-#         time += timedelta(seconds=int(t_time))
+#
+#     time_unit = ''
+#     time_value = ''
+#     for i in range(len(duration)):
+#         if duration[i].isdigit():
+#             time_value += duration[i]
+#         elif duration[i].isalpha():
+#             time_unit += duration[i]
+#
+#             if time_unit in time_dict:
+#                 time += timedelta(seconds=int(time_value) * time_dict[time_unit])
+#
+#                 time_value = ''
+#                 time_unit = ''
+#
 #     return time
+
 
 
 
